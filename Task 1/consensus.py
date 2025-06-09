@@ -70,36 +70,62 @@ class Network:
             for block in node.blockchain:
                 print(f"Block {block.index}: {block.data}")
 
+# --- Consensus Mechanism Simulation ---
+
+def simulate_pow():
+    # Proof of Work: Select validator with highest power
+    print("\n--- Proof of Work (PoW) Simulation ---")
+    validators = [
+        {"name": "MinerA", "power": random.randint(1, 100)},
+        {"name": "MinerB", "power": random.randint(1, 100)},
+        {"name": "MinerC", "power": random.randint(1, 100)}
+    ]
+    for v in validators:
+        print(f"{v['name']} has power: {v['power']}")
+    winner = max(validators, key=lambda v: v["power"])
+    print(f"Selected Validator: {winner['name']} (Highest power: {winner['power']})")
+    print("Explanation: In PoW, the miner with the most computational power is most likely to add the next block.")
+
+
+def simulate_pos():
+    # Proof of Stake: Select validator with highest stake
+    print("\n--- Proof of Stake (PoS) Simulation ---")
+    validators = [
+        {"name": "StakerA", "stake": random.randint(1, 100)},
+        {"name": "StakerB", "stake": random.randint(1, 100)},
+        {"name": "StakerC", "stake": random.randint(1, 100)}
+    ]
+    for v in validators:
+        print(f"{v['name']} has stake: {v['stake']}")
+    winner = max(validators, key=lambda v: v["stake"])
+    print(f"Selected Validator: {winner['name']} (Highest stake: {winner['stake']})")
+    print("Explanation: In PoS, the validator with the most coins staked is most likely to add the next block.")
+
+
+def simulate_dpos():
+    # Delegated Proof of Stake: Voters select delegates
+    print("\n--- Delegated Proof of Stake (DPoS) Simulation ---")
+    delegates = ["DelegateA", "DelegateB", "DelegateC"]
+    voters = ["Voter1", "Voter2", "Voter3"]
+    # Each voter votes for a delegate (randomly for this simulation)
+    votes = {d: 0 for d in delegates}
+    for voter in voters:
+        vote = random.choice(delegates)
+        votes[vote] += 1
+        print(f"{voter} votes for {vote}")
+    # Find delegate(s) with most votes
+    max_votes = max(votes.values())
+    winners = [d for d, v in votes.items() if v == max_votes]
+    selected = random.choice(winners)
+    print(f"Selected Validator: {selected} (Most votes: {max_votes})")
+    print("Explanation: In DPoS, validators are chosen by votes. The most-voted delegates take turns adding blocks.")
+
+
 def main():
-    # Create network and nodes
-    network = Network()
-    node1 = Node("Node 1")
-    node2 = Node("Node 2")
-    node3 = Node("Node 3")
-    network.add_node(node1)
-    network.add_node(node2)
-    network.add_node(node3)
-    # Add blocks and broadcast
-    print("Adding blocks to Node 1...")
-    node1.add_block("Transaction 1")
-    node1.add_block("Transaction 2")
-    print("\nBroadcasting Node 1's blockchain...")
-    network.broadcast_blockchain(node1)
-    network.simulate_consensus()
-    # Fork scenario
-    print("\nDemonstrating fork scenario...")
-    node2.add_block("Transaction 3 (from Node 2)")
-    node3.add_block("Transaction 3 (from Node 3)")
-    print("\nFork created:")
-    network.simulate_consensus()
-    # Resolve fork
-    print("\nResolving fork (longest chain wins)...")
-    for node in network.nodes:
-        for other_node in network.nodes:
-            if node != other_node:
-                node.update_blockchain(other_node.get_blockchain())
-    print("\nFinal state after consensus:")
-    network.simulate_consensus()
+    print("\nSimulating and comparing consensus mechanisms (PoW, PoS, DPoS)...")
+    simulate_pow()
+    simulate_pos()
+    simulate_dpos()
 
 if __name__ == "__main__":
     main() 
